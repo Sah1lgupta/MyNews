@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pingolearn/api/firebase_api.dart';
 import 'package:pingolearn/provider/auth_provider.dart';
 import 'package:pingolearn/ui/news_list.dart';
@@ -71,8 +72,8 @@ class _SignInScreenState extends State<AuthScreen> {
               width: 180,
               height: 40,
               child: ElevatedButton(
-                onPressed:() {FirebaseAPIs.signInWithEmailAndPassword(context,_emailController, _passwordController)
-                    .then((){ Navigator.push(context, CupertinoPageRoute(builder:  (context) => NewsList(),)); });},
+                onPressed:() { if( _nameController.text.isNotEmpty && _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty){ FirebaseAPIs.signInWithEmailAndPassword(context,_emailController, _passwordController); } else if( _nameController.text.toString().isEmpty || _emailController.text.toString().isEmpty || _passwordController.text.toString().isEmpty){ showValidationToast();}},
+
                 child: Text('Sign In',style: TextStyle(fontFamily: 'Poppins'),),
                 style: ElevatedButton.styleFrom(backgroundColor: CustomColors.blue),
               ),
@@ -131,7 +132,7 @@ class _SignInScreenState extends State<AuthScreen> {
               width: 190,
               height: 40,
               child: ElevatedButton(
-                onPressed:() {FirebaseAPIs.logInWithEmailAndPassword(context,_emailController, _passwordController);},
+                onPressed:() {if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty){ FirebaseAPIs.logInWithEmailAndPassword(context,_emailController, _passwordController); } else if(_emailController.text.toString().isEmpty || _passwordController.text.toString().isEmpty){ showValidationToast();}},
                 child: Text('Log In',style: TextStyle(fontFamily: 'Poppins'),),
                 style: ElevatedButton.styleFrom(backgroundColor: CustomColors.blue),
               ),
@@ -161,6 +162,17 @@ class _SignInScreenState extends State<AuthScreen> {
   }
 
 
+  void showValidationToast() {
+    Fluttertoast.showToast(
+      msg: 'Please fill the details.',
+      toastLength: Toast.LENGTH_SHORT, // You can use Toast.LENGTH_LONG for a longer duration.
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1, // Time duration for iOS and web (in seconds).
+      backgroundColor: Colors.grey[700],
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
 
 
 

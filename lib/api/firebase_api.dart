@@ -18,7 +18,17 @@ class FirebaseAPIs{
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
-      ).whenComplete(() => Navigator.push(context, CupertinoPageRoute(builder: (context)=> NewsList())));
+      );
+
+      if (userCredential.user != null) {
+        // Navigate to another screen after successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NewsList(),
+          ),
+        );
+      }
       // Successful sign-in, you can navigate to the next screen or do other actions here.
       print("Logged in as: ${userCredential.user!.email}");
     } catch (e) {
@@ -33,9 +43,20 @@ class FirebaseAPIs{
      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
        email: _emailController.text.trim(),
        password: _passwordController.text.trim(),
-     ).whenComplete(() => Navigator.push(context, CupertinoPageRoute(builder: (context)=> NewsList())));
+     );
      // Successful sign-in, you can navigate to the next screen or do other actions here.
      print("Signed in as: ${userCredential.user!.email}");
+
+     if (userCredential.user != null) {
+       // Navigate to another screen after successful login
+       Navigator.pushReplacement(
+         context,
+         MaterialPageRoute(
+           builder: (context) => NewsList(),
+         ),
+       );
+     }
+
    } catch (e) {
      // Handle sign-in errors, e.g., wrong credentials, network issues, etc.
      print("Error signing in: $e");
